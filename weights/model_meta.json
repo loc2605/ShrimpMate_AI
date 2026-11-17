@@ -1,0 +1,24 @@
+{
+  "version": "v2.0.0",
+  "datasetSource": "shrimp_feeding_dataset.csv",
+  "totalSamples": 4000,
+  "trainSamples": 3200,
+  "testSamples": 800,
+  "metrics": {
+    "mae": 0.28,
+    "rmse": 0.473,
+    "mape": 3.06,
+    "r2": 0.992,
+    "latencyMs": 0.45
+  },
+  "featureImportances": {
+    "doc": 0.06080000102519989,
+    "avg_weight_g": 0.31279999017715454,
+    "do_min": 0.19300000369548798,
+    "delta_tan": 0.012900000438094139,
+    "morning_rain_mm": 0.19280000030994415,
+    "prev_feed_kg": 0.22020000219345093,
+    "water_change_m3": 0.007499999832361937
+  },
+  "lastRetrainedAt": "2026-11-23T20:12:54.002042"
+}
