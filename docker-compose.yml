@@ -1,0 +1,28 @@
+version: '3.8'
+
+services:
+  shrimpmate-ai:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: shrimpmate-ai-service:latest
+    container_name: shrimpmate-ai-service
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    environment:
+      - HOST=0.0.0.0
+      - PORT=8000
+      - CORS_ORIGINS=*
+      - MODEL_DIR=/app/weights
+      - TIMEZONE=Asia/Ho_Chi_Minh
+      - TZ=Asia/Ho_Chi_Minh
+    volumes:
+      - ./weights:/app/weights
+      - ./.env:/app/.env:ro
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 20s
