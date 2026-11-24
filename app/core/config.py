@@ -8,19 +8,19 @@ class Settings(BaseSettings):
     VERSION: str = "2.0.0"
     API_V1_STR: str = ""
 
-    # Server settings
+    # Cấu hình máy chủ
     HOST: str = "0.0.0.0"
     PORT: int = 8000
     DEBUG: bool = False
     WORKERS: int = 1
 
-    # CORS
+    # Cấu hình CORS
     CORS_ORIGINS: Union[str, List[str]] = "*"
 
-    # Model file paths
+    # Đường dẫn thư mục chứa mô hình
     MODEL_DIR: str = "weights"
 
-    # Logging timezone (synchronized with NestJS Backend / Vietnam GMT+7)
+    # Múi giờ ghi log (đồng bộ với Backend NestJS / Việt Nam GMT+7)
     TIMEZONE: str = "Asia/Ho_Chi_Minh"
 
     model_config = SettingsConfigDict(

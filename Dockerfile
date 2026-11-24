@@ -1,49 +1,49 @@
-# Multi-stage Dockerfile for ShrimpMate AI Feeding Service (Lightweight Tabular XGBoost)
+# Dockerfile đa giai đoạn cho ShrimpMate AI Feeding Service (Mô hình XGBoost bảng nhẹ)
 FROM python:3.10-slim AS builder
 
 WORKDIR /app
 
-# Install system build dependencies
+# Cài đặt các gói phụ thuộc để build hệ thống
 RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential \
     curl \
     && rm -rf /var/lib/apt/lists/*
 
-# Copy requirements and install wheels
+# Sao chép requirements và cài đặt các thư viện Python
 COPY requirements.txt .
 RUN pip install --no-cache-dir --upgrade pip && \
     pip install --no-cache-dir --user -r requirements.txt
 
 
-# Production image
+# Giai đoạn chạy thực tế (Production image)
 FROM python:3.10-slim
 
 WORKDIR /app
 
-# Install minimal runtime libraries (OpenMP for XGBoost + curl for healthcheck)
+# Cài đặt thư viện runtime tối thiểu (OpenMP cho XGBoost + curl để kiểm tra healthcheck)
 RUN apt-get update && apt-get install -y --no-install-recommends \
     libgomp1 \
     curl \
     && rm -rf /var/lib/apt/lists/*
 
-# Copy installed Python packages from builder
+# Sao chép các gói Python đã cài đặt từ builder
 COPY --from=builder /root/.local /root/.local
 ENV PATH=/root/.local/bin:$PATH
 ENV PYTHONUNBUFFERED=1
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV TZ=Asia/Ho_Chi_Minh
 
-# Copy source code and weights directory
+# Sao chép mã nguồn và thư mục trọng số mô hình
 COPY app/ /app/app/
 COPY weights/ /app/weights/
 COPY .env.example /app/.env
 
-# Default port
+# Cổng mặc định
 EXPOSE 8000
 
-# Health check
+# Kiểm tra trạng thái hoạt động
 HEALTHCHECK --interval=30s --timeout=10s --start-period=20s --retries=3 \
   CMD curl -f http://localhost:8000/health || exit 1
 
-# Start FastAPI server
+# Khởi chạy máy chủ FastAPI
 CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]

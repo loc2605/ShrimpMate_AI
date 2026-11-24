@@ -20,7 +20,7 @@ def _resolve_timezone(tz_name: str):
 
 
 class TimezoneFormatter(logging.Formatter):
-    """Formatter đồng bộ múi giờ (mặc định Asia/Ho_Chi_Minh, GMT+7) với Backend NestJS."""
+    """Bộ định dạng log đồng bộ múi giờ (mặc định Asia/Ho_Chi_Minh, GMT+7) với Backend NestJS."""
 
     def __init__(self, fmt: str, datefmt: str, tz_name: str):
         super().__init__(fmt=fmt, datefmt=datefmt)
@@ -56,25 +56,25 @@ logger = logging.getLogger("shrimpmate.ai")
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     """
-    Lifespan context manager to load XGBoost feed model once into memory.
+    Trình quản lý vòng đời ứng dụng (Lifespan) để nạp mô hình XGBoost một lần duy nhất vào bộ nhớ.
     """
     logger.info("=" * 60)
-    logger.info("Starting ShrimpMate AI Feeding Service (Pure AI Feeding Mode)...")
-    logger.info(f"Python: {sys.version.split()[0]}")
+    logger.info("Đang khởi động ShrimpMate AI Feeding Service (Chế độ dự báo thức ăn thuần AI)...")
+    logger.info(f"Phiên bản Python: {sys.version.split()[0]}")
 
-    # Load XGBoost Feed Prediction model
-    logger.info("Loading XGBoost Feed Demand Prediction model...")
+    # Nạp mô hình XGBoost dự báo nhu cầu thức ăn
+    logger.info("Đang nạp mô hình XGBoost dự báo nhu cầu thức ăn...")
     try:
         xgboost_feed_service.load_model()
         logger.info("Mô hình AI dự báo lượng thức ăn đã sẵn sàng phục vụ.")
     except Exception as e:
-        logger.error(f"Error loading XGBoost model: {e}")
+        logger.error(f"Lỗi khi nạp mô hình XGBoost: {e}")
 
     logger.info("=" * 60)
 
     yield
 
-    logger.info("Shutting down ShrimpMate AI Service...")
+    logger.info("Đang tắt ShrimpMate AI Service...")
 
 
 app = FastAPI(
@@ -86,7 +86,7 @@ app = FastAPI(
     redoc_url="/redoc",
 )
 
-# Configure CORS Middleware
+# Cấu hình CORS Middleware
 app.add_middleware(
     CORSMiddleware,
     allow_origins=settings.CORS_ORIGINS if isinstance(settings.CORS_ORIGINS, list) else [settings.CORS_ORIGINS],
@@ -98,7 +98,7 @@ app.add_middleware(
 
 @app.middleware("http")
 async def add_process_time_header(request: Request, call_next):
-    """Middleware to measure latency of every request and attach header."""
+    """Middleware đo thời gian xử lý của mỗi yêu cầu và gắn vào header phản hồi."""
     import time
     start_time = time.perf_counter()
     response = await call_next(request)
@@ -107,11 +107,11 @@ async def add_process_time_header(request: Request, call_next):
     return response
 
 
-# Register API routes
+# Đăng ký các router API
 app.include_router(api_router, prefix=settings.API_V1_STR)
 
 
-@app.get("/", tags=["General"])
+@app.get("/", tags=["Hệ thống"])
 async def root():
     return {
         "service": settings.PROJECT_NAME,

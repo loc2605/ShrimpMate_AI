@@ -76,14 +76,14 @@ class XgboostFeedService:
         if os.path.exists(self.model_path):
             try:
                 self.model.load_model(self.model_path)
-                # Verify that the loaded model matches the 7 features
+                # Xác thực mô hình nạp vào khớp với 7 đặc trưng
                 if hasattr(self.model, "n_features_in_") and self.model.n_features_in_ == len(self.feature_names):
                     self.is_loaded = True
                     self._compute_importances()
-                    logger.info(f"Đã nạp thành công mô hình XGBoost {self.model_version} ({len(self.feature_names)} features) từ {self.model_path}")
+                    logger.info(f"Đã nạp thành công mô hình XGBoost {self.model_version} ({len(self.feature_names)} đặc trưng) từ {self.model_path}")
                     return
                 else:
-                    logger.info("Mô hình cũ không khớp số lượng đặc trưng mới (7 features). Huấn luyện lại...")
+                    logger.info("Mô hình cũ không khớp số lượng đặc trưng mới (7 đặc trưng). Huấn luyện lại...")
             except Exception as exc:
                 logger.warning(f"Không thể đọc file {self.model_path}: {exc}. Tiến hành huấn luyện lại.")
 
@@ -305,5 +305,5 @@ class XgboostFeedService:
         return (" ".join(reasons), contributions)
 
 
-# Singleton instance
+# Thể hiện duy nhất (Singleton)
 xgboost_feed_service = XgboostFeedService()

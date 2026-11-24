@@ -1,4 +1,4 @@
-"""Integration test client for ShrimpMate AI Feeding Service."""
+"""Client kiểm thử tích hợp cho dịch vụ AI dự báo lượng thức ăn ShrimpMate."""
 
 import json
 import requests
@@ -7,16 +7,16 @@ BASE_URL = "http://localhost:8000"
 
 
 def test_health():
-    print("\n--- 1. Testing GET /health ---")
+    print("\n--- 1. Kiểm tra GET /health ---")
     res = requests.get(f"{BASE_URL}/health")
-    print(f"Status Code: {res.status_code}")
-    print(json.dumps(res.json(), indent=2))
+    print(f"Mã trạng thái phản hồi: {res.status_code}")
+    print(json.dumps(res.json(), indent=2, ensure_ascii=False))
     assert res.status_code == 200
     assert res.json()["modelsLoaded"]["xgboost"] is True
 
 
 def test_predict_feed_demand():
-    print("\n--- 2. Testing POST /ai/predict-feed-demand ---")
+    print("\n--- 2. Kiểm tra POST /ai/predict-feed-demand ---")
     payload = {
         "pondId": "208cf3b7-0000-4000-8000-000000000001",
         "doc": 45,
@@ -28,7 +28,7 @@ def test_predict_feed_demand():
         "waterChangeM3": 20.0,
     }
     res = requests.post(f"{BASE_URL}/ai/predict-feed-demand", json=payload)
-    print(f"Status Code: {res.status_code}")
+    print(f"Mã trạng thái phản hồi: {res.status_code}")
     print(json.dumps(res.json(), indent=2, ensure_ascii=False))
     assert res.status_code == 200
     data = res.json()
@@ -39,12 +39,12 @@ def test_predict_feed_demand():
 
 
 if __name__ == "__main__":
-    print(f"Starting ShrimpMate AI Feeding Service test suite at {BASE_URL}...")
+    print(f"Khởi chạy bộ kiểm thử dịch vụ AI ShrimpMate tại {BASE_URL}...")
     try:
         test_health()
         test_predict_feed_demand()
-        print("\nALL TEST SUITES PASSED SUCCESSFULLY!")
+        print("\nTẤT CẢ BỘ TEST ĐÃ HOÀN TẤT THÀNH CÔNG!")
     except requests.exceptions.ConnectionError:
-        print(f"\nCould not connect to {BASE_URL}. Please start the server first (python -m uvicorn app.main:app --port 8000).")
+        print(f"\nKhông thể kết nối đến {BASE_URL}. Vui lòng khởi động server trước (python -m uvicorn app.main:app --port 8000).")
     except Exception as e:
-        print(f"\nTest execution failed: {e}")
+        print(f"\nKiểm thử thất bại: {e}")

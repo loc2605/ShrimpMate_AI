@@ -1,12 +1,12 @@
 #!/bin/bash
-# ShrimpMate AI Feeding Service - Curl Test Samples
+# Dịch vụ AI Dự Báo Thức Ăn ShrimpMate - Các mẫu truy vấn Curl kiểm thử
 
 BASE_URL="http://localhost:8000"
 
-echo "=== 1. Health Check ==="
+echo "=== 1. Kiểm tra sức khỏe hệ thống (Health Check) ==="
 curl -s -X GET "${BASE_URL}/health" | jq .
 
-echo -e "\n=== 2. XGBoost 7-Feature Feed Demand Prediction ==="
+echo -e "\n=== 2. Dự báo lượng thức ăn XGBoost (7 đặc trưng môi trường & sinh học) ==="
 curl -s -X POST "${BASE_URL}/ai/predict-feed-demand" \
   -H "Content-Type: application/json" \
   -d '{
