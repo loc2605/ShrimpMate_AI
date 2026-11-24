@@ -6,7 +6,7 @@ Hệ thống tự động cân nhắc và dự báo nhu cầu thức ăn tối �
 
 ---
 
-## 🛠 Tech Stack
+## Tech Stack
 
 - **Ngôn ngữ**: Python 3.10+
 - **Framework**: FastAPI, Uvicorn, Pydantic v2, Pydantic-settings
@@ -18,7 +18,7 @@ Hệ thống tự động cân nhắc và dự báo nhu cầu thức ăn tối �
 
 ---
 
-## 📁 Cấu trúc thư mục
+## Cấu trúc thư mục
 
 ```text
 shrimpmate-AI/
@@ -45,76 +45,7 @@ shrimpmate-AI/
 
 ---
 
-## 📡 API Endpoints
-
-### 1. Dự báo lượng thức ăn (XGBoost Regressor)
-- **Method**: `POST`
-- **Path**: `/ai/predict-feed-demand`
-- **Request Body** (`FeedPredictionRequest`):
-```json
-{
-  "pondId": "208cf3b7-0000-4000-8000-000000000001",
-  "doc": 45,
-  "avgWeightG": 12.5,
-  "doMin": 5.2,
-  "deltaTan": 0.05,
-  "morningRainMm": 0.0,
-  "prevFeedAmountKg": 8.0,
-  "waterChangeM3": 20.0
-}
-```
-
-- **Response Body** (`FeedPredictionResult`):
-```json
-{
-  "predictedFeedAmountKg": 10.45,
-  "baseValueKg": 7.62,
-  "modelName": "XGBoost-Regressor",
-  "modelVersion": "v2.0.0",
-  "featureImportance": {
-    "doc": 0.0576,
-    "avg_weight_g": 0.2848,
-    "do_min": 0.1997,
-    "delta_tan": 0.0237,
-    "morning_rain_mm": 0.2506,
-    "prev_feed_kg": 0.1701,
-    "water_change_m3": 0.0135
-  },
-  "featureContributions": [
-    {
-      "feature": "avg_weight_g",
-      "name": "Trọng lượng bình quân (ABW)",
-      "value": "12.50 g/con",
-      "impact": "INCREASE",
-      "deltaKg": 1.12,
-      "description": "Trọng lượng bình quân (ABW) (12.50 g/con) làm tăng dự báo khẩu phần +1.12 kg theo mô hình XGBoost (TreeSHAP)."
-    }
-  ],
-  "explanation": "Tôm DOC 45 ngày (ABW 12.50 g/con), lượng ăn cữ trước 8.00 kg. Khuyến nghị XGBoost cấp phát: 10.45 kg cho cữ ăn này."
-}
-```
-
----
-
-### 2. Health check
-- **Method**: `GET`
-- **Path**: `/health`
-- **Response**:
-```json
-{
-  "status": "healthy",
-  "service": "ShrimpMate AI Feeding Service",
-  "version": "2.0.0",
-  "modelName": "XGBoost-Regressor",
-  "modelsLoaded": {
-    "xgboost": true
-  }
-}
-```
-
----
-
-## 🚀 Hướng dẫn khởi chạy
+## Hướng dẫn khởi chạy
 
 1. Cài đặt thư viện:
 ```bash
